@@ -4,7 +4,7 @@ from tqdm import tqdm
 import time
 from datetime import timedelta
 import numpy as np
-PAD, CLS = '[PAD]', '[CLS]'  # padding符号, bert中综合信息符号
+PAD, CLS = '[PAD]', '[CLS]'  
 
 def build_dataset(config):
     def load_dataset(path, pad_size=32):
@@ -47,24 +47,21 @@ class DatasetIterater(object):
         self.batch_size = batch_size
         self.batches = batches
         self.n_batches = len(batches) // batch_size
-        self.residue = len(batches) % batch_size != 0  # 通过直接计算是否有余数来确定self.residue的值
+        self.residue = len(batches) % batch_size != 0  
         self.index = 0
         self.device = device
-        self.pad_size = pad_size  # 存储 pad_size 以备后用
+        self.pad_size = pad_size  
 
     def _to_tensor(self, datas):
-        # 将输入数据转换为 LongTensor 并移动到指定设备
-        x = torch.LongTensor([_[0] for _ in datas]).to(self.device)  # 输入的句子
-        y = torch.LongTensor([_[1] for _ in datas]).to(self.device)  # 标签
-        event = torch.LongTensor([_[2] for _ in datas]).to(self.device)  # 事件
+        # convert to LongTensor
+        x = torch.LongTensor([_[0] for _ in datas]).to(self.device)  # input sentence
+        y = torch.LongTensor([_[1] for _ in datas]).to(self.device)  # label
+        event = torch.LongTensor([_[2] for _ in datas]).to(self.device)  # topic
 
-        # pad前的长度
-        seq_len = torch.LongTensor([_[3] for _ in datas]).to(self.device)  # 序列长度
+        seq_len = torch.LongTensor([_[3] for _ in datas]).to(self.device)  
         mask = torch.LongTensor([_[4] for _ in datas]).to(self.device)  # mask
 
-        # 确保 x 和 mask 是二维的 (batch_size, sequence_length)
-
-        mask = mask.view(-1, self.pad_size)  # 确保 mask 是二维的
+        mask = mask.view(-1, self.pad_size)  
 
         return (x, seq_len, mask, event), y
 
@@ -100,7 +97,7 @@ def build_iterator(dataset, config):
 
 
 def get_time_dif(start_time):
-    """获取已使用时间"""
+    """get running time"""
     end_time = time.time()
     time_dif = end_time - start_time
     return timedelta(seconds=int(round(time_dif)))

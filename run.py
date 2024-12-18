@@ -13,7 +13,7 @@ parser.add_argument('--model', type=str, required=True, help='choose a model: Be
 args = parser.parse_args()
 
 if __name__ == '__main__':
-    dataset = 'Dataset'  # 数据集
+    dataset = 'Dataset'  
     model_name = args.model  # bert
     x = import_module('models.' + model_name)
 
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     np.random.seed(1)
     torch.manual_seed(1)
     torch.cuda.manual_seed_all(1)
-    torch.backends.cudnn.deterministic = True  # 保证每次结果一样
+    torch.backends.cudnn.deterministic = True  
 
     start_time = time.time()
     print("Loading data...")
