@@ -6,32 +6,32 @@ from torch.autograd import Function
 import time
 
 def get_time_dif(start_time):
-    """计算使用时间"""
+    """running time"""
     end_time = time.time()
     time_dif = end_time - start_time
     return time.strftime("%H:%M:%S", time.gmtime(time_dif))
 
 class Config(object):
-    """配置参数"""
+    """parameters"""
     def __init__(self, dataset):
         self.model_name = 'TANN'
-        self.train_path = dataset + '/data/train.txt'                                # 训练集
-        self.dev_path = dataset + '/data/dev.txt'                                    # 验证集
-        self.test_path = dataset + '/data/test.txt'                                  # 测试集
-        self.class_list = [x.strip() for x in open(dataset + '/data/class.txt').readlines()]  # 类别名单
-        self.save_path = dataset + '/saved_dict/' + self.model_name + '.ckpt'        # 模型训练结果
-        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')   # 设备
+        self.train_path = dataset + '/data/train.txt'                                
+        self.dev_path = dataset + '/data/dev.txt'                                    
+        self.test_path = dataset + '/data/test.txt'                                  
+        self.class_list = [x.strip() for x in open(dataset + '/data/class.txt').readlines()]
+        self.save_path = dataset + '/saved_dict/' + self.model_name + '.ckpt'      
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-        self.require_improvement = 100000  # 若超过1000batch效果还没提升，则提前结束训练
-        self.num_classes = len(self.class_list)  # 类别数
-        self.num_epochs = 5  # epoch数
-        self.batch_size = 32  # mini-batch大小
-        self.pad_size = 64  # 每句话处理成的长度(短填长切)
-        self.learning_rate = 2e-5  # 学习率
+        self.require_improvement = 100000  
+        self.num_classes = len(self.class_list)  
+        self.num_epochs = 5  
+        self.batch_size = 32  
+        self.pad_size = 64  
+        self.learning_rate = 2e-5  
         self.bert_path = './bert_pretrain'
         self.tokenizer = BertTokenizer.from_pretrained(self.bert_path)
         self.hidden_size = 768
-        self.num_filters = 256  # 卷积核数量
+        self.num_filters = 256  
         self.filter_sizes = (2, 3, 4)
         self.dropout = 0.1
         self.event_num = 11
